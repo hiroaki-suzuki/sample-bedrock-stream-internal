@@ -1,0 +1,1 @@
+# Bedrock Stream 内部通信サンプル

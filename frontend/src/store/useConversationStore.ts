@@ -12,13 +12,26 @@ interface ConversationStore {
   postMessage: (message: string) => Promise<void>
 }
 
+const host = location.hostname
+
 export const useConversationStore = create<ConversationStore>()((set, get) => ({
   messages: [],
   postMessage: async message => {
-    const webSocket = new WebSocket('ws://localhost:8080')
+    const webSocket = new WebSocket(`ws://${host}:8080`)
     webSocket.binaryType = 'arraybuffer'
 
-    webSocket.onopen = () => webSocket.send(message)
+    webSocket.onopen = () => {
+      const currentMessages = get().messages
+      const sendMessage = currentMessages.reduce((acc, cur) => {
+        if (cur.role === 'human') {
+          return `${acc} Human: ${cur.text}\n Assistant: `
+        } else {
+          return `${acc} ${cur.text}\n`
+        }
+      }, '')
+      webSocket.send(sendMessage)
+    }
+
     webSocket.onerror = (event: Event) => {
       webSocket.close()
       console.error(event)

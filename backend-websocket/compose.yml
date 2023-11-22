@@ -1,0 +1,12 @@
+services:
+  web-socker:
+    build:
+      context: .
+      dockerfile: ./infra/Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      TZ: "Asia/Tokyo"
+      AWS_PROFILE: "default"
+    volumes:
+      - ~/.aws:/root/.aws:ro

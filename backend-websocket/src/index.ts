@@ -20,14 +20,15 @@ wsServer.on('connection', ws => {
 
   ws.on('message', async message => {
     try {
-      logger.info(`[START] receive message - ${message}`)
+      console.log(`[START] a receive message - ${message}`)
 
+      const prompt = '' + message
       const command = new InvokeModelWithResponseStreamCommand({
         modelId: 'anthropic.claude-instant-v1',
         contentType: 'application/json',
         accept: '*/*',
         body: JSON.stringify({
-          prompt: message,
+          prompt: prompt,
           max_tokens_to_sample: 1000,
         }),
       })

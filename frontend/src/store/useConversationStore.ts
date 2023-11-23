@@ -24,12 +24,12 @@ export const useConversationStore = create<ConversationStore>()((set, get) => ({
       const currentMessages = get().messages
       const sendMessage = currentMessages.reduce((acc, cur) => {
         if (cur.role === 'human') {
-          return `${acc} Human: ${cur.text}\n Assistant: `
+          return `${acc} Human: ${cur.text}\n\n Assistant: `
         } else {
-          return `${acc} ${cur.text}\n`
+          return `${acc} ${cur.text}\n\n`
         }
       }, '')
-      webSocket.send(sendMessage)
+      webSocket.send(`\n\n${sendMessage.trim()}`)
     }
 
     webSocket.onerror = (event: Event) => {
